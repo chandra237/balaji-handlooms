@@ -25,10 +25,11 @@ function CartSummary({ cart }) {
         <span>Total</span>
         <span>₹{cart.subTotal}</span>
       </div>
-
-      <button className="w-full mt-6 bg-black text-white py-3 rounded-md hover:bg-gray-800 transition">
-        Proceed to Checkout
-      </button>
+      <Link to="/checkout">
+        <button className="w-full mt-6 bg-black text-white py-3 rounded-md hover:bg-gray-800 transition">
+          Proceed to Checkout
+        </button>
+      </Link>
 
     <Link to="/products">
       <p className="text-center text-sm text-gray-500 mt-4 cursor-pointer hover:underline">

@@ -10,6 +10,10 @@ import OurWeaversPage from './pages/OurWeaversPage'
 import AboutUsPage from './pages/AboutUsPage'
 import FeaturedProdcutsPage from './pages/FeaturedProductsPage'
 import { Toaster } from 'react-hot-toast'
+import CheckoutPage from './pages/CheckoutPage'
+import OrderSuccessPage from './pages/OrderSuccessPage'
+import OrderHistoryPage from './pages/OrderHistoryPage'
+import OrderDetailsPage from './pages/OrderDetailsPage'
 
 function App() {
 
@@ -36,6 +40,14 @@ function App() {
               <Route path='/meet-our-weavers' element={<OurWeaversPage />} />
 
               <Route path='/about-us' element={<AboutUsPage />} />
+
+              <Route path='/checkout' element={<CheckoutPage />} />
+
+              <Route path='/order-success/:orderId' element={<OrderSuccessPage />} />
+
+              <Route path='/orders' element={<OrderHistoryPage />} />
+
+              <Route path='/orders/:orderId' element={<OrderDetailsPage />} />
 
             </Routes>
           </main>

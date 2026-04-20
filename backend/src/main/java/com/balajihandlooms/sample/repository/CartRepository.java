@@ -1,6 +1,7 @@
 package com.balajihandlooms.sample.repository;
 
 import com.balajihandlooms.sample.entity.Cart;
+import com.balajihandlooms.sample.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,6 @@ public interface CartRepository extends JpaRepository<Cart, UUID> {
         WHERE c.id = :cartId
     """)
     Optional<Cart> findCartWithItems(UUID cartId);
+
+    Optional<Cart> findByUserId(Long userId);
 }

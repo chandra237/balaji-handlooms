@@ -44,7 +44,7 @@ function ProductsPage(){
 
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                         {products.map((product) => (
-                            <Link to={`/products/${product.slug}`}>
+                            <Link to={`/products/${product.slug}`} key={product.id}>
                                 <ProductCard key={product.id} product={product} />
                             </Link>
                         ))}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CartItem from "../components/CartItem";
 import CartSummary from "../components/CartSummary";
-import { openCartPage } from "../services/cartService";
+import { getCart } from "../services/cartService";
 import { useCart } from "../context/cartContext";
 import { Link } from "react-router-dom";
 import { updateCartItem, removeCartItem } from "../services/cartService";
@@ -17,7 +17,7 @@ function CartPage(){
     });
 
     useEffect(()=>{
-        openCartPage()
+        getCart()
             .then((data) => {
                 setCart(data);
                 setCartCount(data.totalItems);
@@ -107,21 +107,21 @@ function CartPage(){
     if(!cart || cart?.cartItems?.length === 0){
         return (
             <div className="max-w-4xl mx-auto py-20 text-center">
-            <h2 className="text-2xl font-semibold mb-4">
-                Your cart is empty
-            </h2>
+                <h2 className="text-2xl font-semibold mb-4">
+                    Your cart is empty
+                </h2>
 
-            <p className="text-gray-600 mb-6">
-                Looks like you haven't added anything yet.
-            </p>
+                <p className="text-gray-600 mb-6">
+                    Looks like you haven't added anything yet.
+                </p>
 
-            <Link
-                to="/products"
-                className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition"
-            >
-                Continue Shopping
-            </Link>
-        </div>
+                <Link
+                    to="/products"
+                    className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition"
+                >
+                    Continue Shopping
+                </Link>
+            </div>
         )
     }
     else{

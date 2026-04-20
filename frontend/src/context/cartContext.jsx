@@ -1,19 +1,19 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { openCartPage } from "../services/cartService";
+import { getCart } from "../services/cartService";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     useEffect(()=>{
-        openCartPage()
+        getCart()
             .then((data) => {
                 setCartCount(data.totalItems);
             })
             .catch((err)=>{
                 console.error(err);
             });
-    },[]);
+    },[cartCount]);
 
     return (
         <CartContext.Provider value={{ cartCount, setCartCount }}>

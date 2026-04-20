@@ -15,7 +15,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     Optional<CartItem> findByCartIdAndVariantId(UUID cartId, Long variantId);
 
     @Query("""
-        SELECT ci FROM CartItem ci
+        SELECT DISTINCT ci FROM CartItem ci
         JOIN FETCH ci.variant v
         JOIN FETCH v.product
         JOIN FETCH v.images
