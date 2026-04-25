@@ -1,5 +1,6 @@
 package com.balajihandlooms.sample.service;
 
+import com.balajihandlooms.sample.dto.AuthResponseDTO;
 import com.balajihandlooms.sample.dto.LoginRequestDTO;
 import com.balajihandlooms.sample.dto.RegisterRequestDTO;
 import com.balajihandlooms.sample.entity.Role;
@@ -34,21 +35,27 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        user.setRole(Role.ROLE_USER);
+        user.setRole(Role.ROLE_ADMIN);
 
         userRepository.save(user);
     }
 
-    public String login(LoginRequestDTO request) {
+    public AuthResponseDTO login(LoginRequestDTO request) {
         String email = request.getEmail();
         String password = request.getPassword();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Email not found, please register"));
         if(!passwordEncoder.matches(password, user.getPassword())){
-            throw new InvalidCredentialsException("Invalid email or Password");
+            throw new InvalidCredentialsException("Invalid Credentials");
         }
 
-        return jwtUtil.generateToken(user);
+        String token = jwtUtil.generateToken(user);
+        return new AuthResponseDTO(
+                token,
+                user.getName(),
+                user.getEmail(),
+                user.getRole().name()
+        );
     }
 }

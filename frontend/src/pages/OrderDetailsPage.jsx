@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOrder } from "../services/orderService";
+import { useAuth } from "../context/authContext";
 
 function OrderDetailsPage() {
 
     const { orderId } = useParams();
     const navigate = useNavigate();
+    const { isLoggedIn } = useAuth();
 
     const [order, setOrder] = useState(null);
 
@@ -13,12 +15,18 @@ function OrderDetailsPage() {
         fetchOrder();
     }, []);
 
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/");
+        }
+    }, [isLoggedIn]);
+
     const fetchOrder = async () => {
         const data = await getOrder(orderId);
         setOrder(data);
     };
 
-    if (!order) return <p>Loading...</p>;
+    if (!order) return <p className="text-center pt-24">Loading.., please wait!!</p>;
 
     return (
         <div className="max-w-4xl mx-auto py-10">
@@ -45,7 +53,7 @@ function OrderDetailsPage() {
 
                 {order.items.map((item, i) => (
                     <div key={i} className="flex justify-between mb-2">
-                        <span>{item.productName}</span>
+                        <span>{item.productName} ( x{item.quantity})</span>
                         <span>₹{item.subtotal}</span>
                     </div>
                 ))}

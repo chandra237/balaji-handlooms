@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link} from "react-router-dom";
 import { getOrders } from "../services/orderService";
+import { useAuth } from "../context/authContext";
 
 function OrderHistoryPage() {
 
     const [orders, setOrders] = useState([]);
     const navigate = useNavigate();
+    const { isLoggedIn } = useAuth();
 
     useEffect(() => {
         fetchOrders();
     }, []);
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/");
+        }
+    }, [isLoggedIn]);
 
     const fetchOrders = async () => {
         const data = await getOrders();

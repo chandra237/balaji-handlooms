@@ -16,3 +16,19 @@
 .animate-fadeIn {
   animation: fadeIn 0.4s ease-in-out;
 }
+
+.input {
+  @apply w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black;
+}
+
+.label {
+  @apply text-sm text-gray-600 mb-1 block;
+}
+
+.btn-primary {
+  @apply bg-black text-white px-4 py-2 rounded-md;
+}
+
+.upload-box {
+  @apply border border-dashed p-3 text-center cursor-pointer text-sm text-gray-500;
+}

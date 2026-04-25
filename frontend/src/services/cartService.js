@@ -1,4 +1,5 @@
 import API_BASE_URL from "../config/api";
+import { useAuth } from "../context/authContext";
 
 export const addItemToCart = async (variantId, quantity) => {
     const token = localStorage.getItem("token");
@@ -64,7 +65,7 @@ export const getCart = async () => {
         });
 
         if(!response.ok){
-            throw new Error("Failed to fetch the cart");
+            return { cartItems: [], subTotal: 0, totalItems: 0 };
         }
     
         return response.json();
@@ -78,7 +79,7 @@ export const getCart = async () => {
         const response = await fetch(`${API_BASE_URL}/cart/guest?cartId=${cartId}`);
     
         if(!response.ok){
-            throw new Error("Failed to fetch the cart page");
+            return { cartItems: [], subTotal: 0, totalItems: 0 };
         }
     
         return response.json();
@@ -178,7 +179,10 @@ export const mergeCarts = async () => {
         })
 
         if(response.ok){
+            console.log("Cart merged successfully");
             localStorage.removeItem("cartId");
+        }else{
+            console.error("Cart merge failed");
         }
     }
 }

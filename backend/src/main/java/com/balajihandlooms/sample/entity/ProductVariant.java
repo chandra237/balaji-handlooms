@@ -41,7 +41,7 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")
-    private Set<VariantImage> images;
+    private List<VariantImage> images;
 }

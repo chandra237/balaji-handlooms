@@ -7,7 +7,7 @@ function CartItem({ item, onUpdate, onRemove }) {
 
       {/* Image */}
       <img
-        src={`/images/${item.imageUrl}`}
+        src={item.imageUrl}
         alt={item.productName}
         className="w-24 h-32 object-cover rounded-md cursor-pointer"
       />

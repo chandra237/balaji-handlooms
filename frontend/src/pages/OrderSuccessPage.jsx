@@ -2,23 +2,34 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { getOrder } from "../services/orderService";
 import { useCart } from "../context/cartContext";
+import { useAuth } from "../context/authContext";
+import { getCart } from "../services/cartService";
 
 function OrderSuccessPage() {
 
     const { orderId } = useParams();
     const navigate = useNavigate();
+    const { isLoggedIn } = useAuth();
 
     const [order, setOrder] = useState(null);
-    const { setCartCount } = useCart();
+    const { updateCart } = useCart();
 
     useEffect(() => {
         fetchOrder();
     }, []);
 
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/");
+        }
+    }, [isLoggedIn]);
+
     const fetchOrder = async () => {
         const data = await getOrder(orderId);
         setOrder(data);
-        setCartCount(0);
+
+        const updatedCart = await getCart();
+        updateCart(updatedCart);
     };
 
     if (!order) return (
@@ -60,7 +71,7 @@ function OrderSuccessPage() {
 
                 {order.items.map((item, i) => (
                     <div key={i} className="flex justify-between mb-2">
-                        <span>{item.productName}</span>
+                        <span>{item.productName} ( x{item.quantity})</span>
                         <span>₹{item.subtotal}</span>
                     </div>
                 ))}

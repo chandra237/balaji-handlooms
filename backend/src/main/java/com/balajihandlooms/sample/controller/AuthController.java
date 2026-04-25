@@ -1,9 +1,11 @@
 package com.balajihandlooms.sample.controller;
 
+import com.balajihandlooms.sample.dto.AuthResponseDTO;
 import com.balajihandlooms.sample.dto.LoginRequestDTO;
 import com.balajihandlooms.sample.dto.RegisterRequestDTO;
 import com.balajihandlooms.sample.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,16 +21,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequestDTO request){
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterRequestDTO request){
         authService.register(request);
-
-        return "User Registered successfully";
+        return ResponseEntity.ok(Map.of(
+                "message", "User registered successfully"
+        ));
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginRequestDTO request){
-        String token = authService.login(request);
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request){
+        AuthResponseDTO authResponseDTO = authService.login(request);
 
-        return Map.of("token", token);
+        return ResponseEntity.ok(authResponseDTO);
     }
 }

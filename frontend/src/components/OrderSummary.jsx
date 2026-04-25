@@ -3,12 +3,15 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
 import { placeOrder } from "../services/orderService";
+import { useCart } from "../context/cartContext";
+import { getCart } from "../services/cartService";
 
 function OrderSummary({ cart, selectedAddress }) {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { updateCart } = useCart();
 
   const confirmOrder = async () => {
     try{
@@ -16,8 +19,11 @@ function OrderSummary({ cart, selectedAddress }) {
 
       const data = await placeOrder(selectedAddress);
 
+      const updatedCart = await getCart(); 
+      updateCart(updatedCart);
+      
       navigate(`/order-success/${data.orderId}`);
-
+      
       toast.success("Order placed!!");
     }
     catch(err){

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getProduct, getRelatedProducts } from "../services/productService";
 import ProductCard from "../components/ProductCard";
-import { addItemToCart } from "../services/cartService";
+import { addItemToCart, getCart } from "../services/cartService";
 import toast from "react-hot-toast";
 import { useCart } from "../context/cartContext";
 
@@ -16,7 +16,7 @@ function ProductDetailsPage(){
     const [showZoom, setShowZoom] = useState(false);
     const [imgLoaded, setImgLoaded] = useState(false);
     const [addToCartLoading, setAddToCartLoading] = useState(false);
-    const { setCartCount } = useCart();
+    const { updateCart } = useCart();
 
     const { slug } = useParams();
     console.log(slug);
@@ -66,7 +66,9 @@ function ProductDetailsPage(){
 
             const data = await addItemToCart(variantId, quantity);
 
-            setCartCount(data.totalItems);
+            const updatedCart = await getCart();
+            updateCart(updatedCart);
+
             toast.success("Item Added to cart");
             console.log("Added to cart");
 
@@ -112,7 +114,7 @@ function ProductDetailsPage(){
                         {selectedVariant?.images?.map((img) => (
                             <img 
                                 key={img.id}
-                                src={`/images/${img.imageUrl}`}
+                                src={img.imageUrl}
                                 onClick={() => {
                                     setSelectedImage(img);
                                     setImgLoaded(false);
@@ -131,7 +133,7 @@ function ProductDetailsPage(){
                     <div>
                         <img
                             key={selectedImage?.id}
-                            src={`/images/${selectedImage?.imageUrl}`}
+                            src={selectedImage?.imageUrl}
                             alt={product.name}
                             loading="eager"
                             onLoad={() => setImgLoaded(true)}
@@ -194,26 +196,28 @@ function ProductDetailsPage(){
             </div>
 
             {/* Related Products Section */}
-            <div className="mt-24">
-                <h2 className="text-3xl font-brand mb-10 text-center">
-                    You may also like
-                </h2>
+            {(relatedproducts && relatedproducts.length > 0) &&
+                <div className="mt-24">
+                    <h2 className="text-3xl font-brand mb-10 text-center">
+                        You may also like
+                    </h2>
 
-                <div className="grid grid-col-2 md:grid-cols-4 gap-8">
-                    {relatedproducts && relatedproducts.map((product) => (
-                        <Link to={`/products/${product.slug}`} key={product.id}>
-                            <ProductCard key={product.id} product={product} />
-                        </Link>
-                    ))}
+                    <div className="grid grid-col-2 md:grid-cols-4 gap-8">
+                        {relatedproducts && relatedproducts.map((product) => (
+                            <Link to={`/products/${product.slug}`} key={product.id}>
+                                <ProductCard key={product.id} product={product} />
+                            </Link>
+                        ))}
+                    </div>
+
                 </div>
-
-            </div>
+            }
 
             {showZoom && (
                 <div onClick={() => setShowZoom(false)} className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
 
                     <img
-                        src={`/images/${selectedImage?.imageUrl}`}
+                        src={selectedImage?.imageUrl}
                         className="max-h-[94vh] rounded-lg"
                         onClick={(e) => e.stopPropagation()}
                     />

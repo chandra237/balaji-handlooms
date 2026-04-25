@@ -11,7 +11,7 @@ function ProductCard({ product }){
                 </div>
 
                 <img
-                    src={`/images/${product.imageUrl}`}
+                    src={product.imageUrl}
                     alt={product.name}
                     loading="lazy"
                     className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition duration-700"

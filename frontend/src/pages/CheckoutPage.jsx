@@ -3,28 +3,14 @@ import { useCart } from "../context/cartContext";
 import { getCart } from "../services/cartService";
 import OrderSummary from "../components/OrderSummary";
 import AddressList from "../components/AddressList";
+import { useAuth } from "../context/authContext";
 
 
 function CheckoutPage(){
 
-    const { setCartCount } = useCart();
+    const { cart, updateCart } = useCart();
+    const { isLoggedIn } = useAuth();
     const [selectedAddress, setSelectedAddress] =useState(null);
-    const [cart, setCart] = useState({
-        cartItems: [],
-        subTotal: 0,
-        totalItems: 0
-    });
-
-    useEffect(()=>{
-        getCart()
-            .then((data) => {
-                setCart(data);
-                setCartCount(data.totalItems);
-            })
-            .catch((err)=>{
-                console.error(err);
-            });
-    },[]);
 
     return(
         <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-3 gap-8">

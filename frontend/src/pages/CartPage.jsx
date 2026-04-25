@@ -6,62 +6,19 @@ import { useCart } from "../context/cartContext";
 import { Link } from "react-router-dom";
 import { updateCartItem, removeCartItem } from "../services/cartService";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/authContext";
 
-function CartPage(){
+function CartPage( { requireAuth }){
 
-    const { setCartCount } = useCart();
-    const [cart, setCart] = useState({
-        cartItems: [],
-        subTotal: 0,
-        totalItems: 0
-    });
-
-    useEffect(()=>{
-        getCart()
-            .then((data) => {
-                setCart(data);
-                setCartCount(data.totalItems);
-            })
-            .catch((err)=>{
-                console.error(err);
-            });
-    },[]);
+    const { cart, updateCart } = useCart();
+    const { isLoggedIn } = useAuth();
 
     const handleUpdateQuantity = async (itemId, quantity) => {
         try{
             const data = await updateCartItem(itemId, quantity);
-    
-            setCartCount(data.totalItems);
-            setCart(prev => {
-                const updatedItems = prev.cartItems
-                    .map(item =>
-                        item.itemId === itemId
-                            ? {
-                                ...item,
-                                quantity: quantity,
-                                subtotal: item.price * quantity
-                            }
-                            : item
-                    )
-                    .filter(item => item.quantity > 0);
-
-                const totalItems = updatedItems.reduce(
-                    (sum, item) => sum + item.quantity,
-                    0
-                );
-
-                const subTotal = updatedItems.reduce(
-                    (sum, item) => sum + item.subtotal,
-                    0
-                );
-
-                return {
-                    ...prev,
-                    cartItems: updatedItems,
-                    totalItems,
-                    subTotal
-                };
-            });
+            
+            const updatedCart = await getCart(); 
+            updateCart(updatedCart);
         }
         catch(err){
             console.error(err);
@@ -72,31 +29,10 @@ function CartPage(){
         try{
             const data = await removeCartItem(itemId);
 
-            setCartCount(data.totalItems);
-            toast.success("Item removed from cart");
-            setCart(prev => {
+            const updatedCart = await getCart(); 
+            updateCart(updatedCart);
 
-                const updatedItems = prev.cartItems.filter(
-                    item => item.itemId !== itemId
-                );
-
-                const totalItems = updatedItems.reduce(
-                    (sum, item) => sum + item.quantity,
-                    0
-                );
-
-                const subTotal = updatedItems.reduce(
-                    (sum, item) => sum + item.subtotal,
-                    0
-                );
-
-                return {
-                    ...prev,
-                    cartItems: updatedItems,
-                    totalItems,
-                    subTotal
-                };
-            });
+            toast.success("Item removed from cart");   
         }
         catch(err){
             toast.error("Failed to remove item from cart");
@@ -142,7 +78,7 @@ function CartPage(){
                     </div>
     
                     {/* Summary */}
-                    {cart && <CartSummary cart={cart}/>}
+                    {cart && <CartSummary cart={cart} requireAuth={requireAuth}/>}
     
                 </div>
             </div>
