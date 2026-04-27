@@ -288,7 +288,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@your-username](https://github.com/your-username)
+- GitHub: [@your-username](https://github.com/chandra237)
 - LinkedIn: [your-linkedin](https://www.linkedin.com/in/chandra-sekhar-010028248/)
 
 ---
