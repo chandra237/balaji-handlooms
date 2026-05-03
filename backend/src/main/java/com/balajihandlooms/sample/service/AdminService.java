@@ -10,6 +10,7 @@ import com.balajihandlooms.sample.repository.CategoryRepository;
 import com.balajihandlooms.sample.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@PreAuthorize("hasRole('ADMIN')")
 @Service
 @RequiredArgsConstructor
 public class AdminService {
