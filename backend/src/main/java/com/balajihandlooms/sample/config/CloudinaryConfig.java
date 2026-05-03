@@ -28,8 +28,4 @@ public class CloudinaryConfig {
         ));
     }
 
-    @PostConstruct
-    public void test() {
-        System.out.println("Loaded Cloudinary: " + cloudName);
-    }
 }
