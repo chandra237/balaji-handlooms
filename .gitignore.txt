@@ -6,5 +6,7 @@ backend/*.log
 frontend/node_modules/
 frontend/build/
 
-# General
+# Secrets & configs
 .env
+**/application.properties
+**/application-*.properties
